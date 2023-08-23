@@ -17,7 +17,7 @@ And Spring Data JPA builds upon Hibernate with reducing boilerplate code and mak
 
 Give any given Class the following annotations: *@Entity @NoArgsConstructor*.
 Also give a field the *@Id* annotation
-Afterwards you can create a Interface that implements *JpaRepository* and define which Class it should work with.
+Afterward you can create an Interface that implements *JpaRepository* and define which Class it should work with.
 Then you can use the interface to save or delete from a given database.
 
 
