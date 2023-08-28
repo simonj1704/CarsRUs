@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 //------------------
 @Entity
 @Table(name="member")
-public class Member {
+public class Member extends AdminDetails{
     @Id
     String username;
     String email;
@@ -29,10 +29,7 @@ public class Member {
     String zip;
     boolean approved;
     int ranking;
-    @CreationTimestamp
-    LocalDateTime created;
-    @UpdateTimestamp
-    LocalDateTime lastEdited;
+
 
     public Member(String user, String password, String email, String firstName,
                   String lastName, String street, String city, String zip) {
