@@ -44,7 +44,7 @@ public class MemberService {
 
     public ResponseEntity<Boolean> editMember(MemberRequest body, String username) {
         Member member = memberRepository.findById(username).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does exist"));
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
         if(!body.getUsername().equals(username)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Cannot change username");
         }
@@ -60,6 +60,10 @@ public class MemberService {
     }
 
 
+    public MemberResponse findById(String username) {
+        Member member = memberRepository.findById(username).
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
 
-
+        return new MemberResponse(member, true);
+    }
 }

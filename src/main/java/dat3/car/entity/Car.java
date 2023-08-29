@@ -35,4 +35,12 @@ public class Car extends AdminDetails{
         this.pricePrDay = pricePrDay;
         this.bestDiscount = bestDiscount;
     }
+
+    public Car(String brand, String model, double pricePrDay, int bestDiscount) {
+        this.id = id;
+        this.brand = brand;
+        this.model = model;
+        this.pricePrDay = pricePrDay;
+        this.bestDiscount = bestDiscount;
+    }
 }
