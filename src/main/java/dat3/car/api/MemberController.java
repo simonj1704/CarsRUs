@@ -39,7 +39,7 @@ class MemberController {
         return memberService.addMember(body);
     }
 
-    //Security ???
+    //Security Admin
     @PutMapping("/{username}")
     ResponseEntity<Boolean> editMember(@RequestBody MemberRequest body, @PathVariable String username){
         return memberService.editMember(body, username);

@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 //It's really IMPORTANT that you understand the purpose of this annotation
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarResponse {
-    int id;
+    Integer id;
     String brand;
     String model;
-    double pricePrDay;
-    int bestDiscount;
+    Double pricePrDay;
+    Integer bestDiscount;
 
     //@JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss",shape = JsonFormat.Shape.STRING)
     LocalDateTime created;

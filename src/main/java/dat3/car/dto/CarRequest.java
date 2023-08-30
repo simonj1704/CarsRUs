@@ -17,12 +17,11 @@ public class CarRequest {
     int bestDiscount;
 
     public static Car getCarRequest(CarRequest c){
-        return new Car(c.getId(),c.getBrand(),c.getModel(),c.getPricePrDay(),c.getBestDiscount());
+        return new Car(c.getBrand(),c.getModel(),c.getPricePrDay(),c.getBestDiscount());
     }
 
     // Car to CarRequest conversion
     public CarRequest(Car c){
-        this.id = c.getId();
         this.brand = c.getBrand();
         this.model = c.getModel();
         this.pricePrDay = c.getPricePrDay();
