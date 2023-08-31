@@ -4,10 +4,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CarServiceTest {
+class MemberServiceTest {
 
     @Test
-    void getCars() {
+    void getMembers() {
+    }
+
+    @Test
+    void addMember() {
+    }
+
+    @Test
+    void editMember() {
     }
 
     @Test
@@ -15,18 +23,10 @@ class CarServiceTest {
     }
 
     @Test
-    void addCar() {
+    void deleteMemberByUsername() {
     }
 
     @Test
-    void editCar() {
-    }
-
-    @Test
-    void setBestDiscountOnCar() {
-    }
-
-    @Test
-    void deleteCarById() {
+    void setRankingForUser() {
     }
 }
