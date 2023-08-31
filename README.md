@@ -1,3 +1,7 @@
+[![Build and deploy JAR app to Azure Web App - dat3week2Simon](https://github.com/simonj1704/CarsRUs/actions/workflows/main_dat3week2simon.yml/badge.svg)](https://github.com/simonj1704/CarsRUs/actions/workflows/main_dat3week2simon.yml)
+
+
+
 
 ## The idea with, and reasons for why to use, an ORM-mapper:
 
