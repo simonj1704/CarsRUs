@@ -2,9 +2,7 @@ package dat3.car.service;
 
 import dat3.car.dto.CarRequest;
 import dat3.car.dto.CarResponse;
-import dat3.car.dto.MemberResponse;
 import dat3.car.entity.Car;
-import dat3.car.entity.Member;
 import dat3.car.repositories.CarRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +32,7 @@ public class CarService {
     }
 
     public CarResponse findById(int id) {
-        Car car = carRepository.findById(id).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Car with this id does not exist"));
+        Car car = getCarById(id);
         return new CarResponse(car, true);
     }
 
@@ -48,9 +45,8 @@ public class CarService {
         return new CarResponse(newCar, true);
     }
 
-    public ResponseEntity<Boolean> editMember(CarRequest body, int id) {
-        Car car = carRepository.findById(id).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Car with ID does not exist"));
+    public ResponseEntity<Boolean> editCar(CarRequest body, int id) {
+        Car car = getCarById(id);
         if(body.getId() != id){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Cannot change ID");
         }
@@ -62,14 +58,19 @@ public class CarService {
         return ResponseEntity.ok(true);
     }
 
-    public boolean deleteCarById(int id) {
-        Car car = carRepository.findById(id).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Car with ID does not exist"));
-        boolean deleted = false;
+    public void setBestDiscountOnCar(int id, int value){
+        Car car = getCarById(id);
+        car.setBestDiscount(value);
+        carRepository.save(car);
+    }
+
+    public void deleteCarById(int id) {
+        Car car = getCarById(id);
         carRepository.delete(car);
-        if (carRepository.findById(id).isEmpty()){
-            deleted = true;
-        }
-        return deleted;
+    }
+
+    private Car getCarById(int id){
+        return carRepository.findById(id).
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Car with ID does not exist"));
     }
 }

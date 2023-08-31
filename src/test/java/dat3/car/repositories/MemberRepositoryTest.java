@@ -35,4 +35,11 @@ class MemberRepositoryTest {
         assertEquals(0, memberRepository.count());
     }
 
+    @Test
+    public void testFindById(){
+        Member member = memberRepository.findById("user1").get();
+        assertEquals("John", member.getFirstName());
+    }
+
+
 }

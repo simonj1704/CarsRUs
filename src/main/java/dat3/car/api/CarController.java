@@ -2,7 +2,6 @@ package dat3.car.api;
 
 import dat3.car.dto.CarRequest;
 import dat3.car.dto.CarResponse;
-import dat3.car.dto.MemberResponse;
 import dat3.car.service.CarService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +37,19 @@ public class CarController {
 
     //Security Admin
     @PutMapping("/{id}")
-    ResponseEntity<Boolean> editMember(@RequestBody CarRequest body, @PathVariable int id){
-        return carService.editMember(body, id);
+    ResponseEntity<Boolean> editCar(@RequestBody CarRequest body, @PathVariable int id){
+        return carService.editCar(body, id);
+    }
+
+    //Security ADMIN
+    @PatchMapping("/ranking/{id}/{value}")
+    public void setBestDiscountOnCar(@PathVariable int id, @PathVariable int value){
+        carService.setBestDiscountOnCar(id,value);
     }
 
     //Security Admin
     @DeleteMapping("/{id}")
-    boolean deleteCarById(@PathVariable int id) {
-        return carService.deleteCarById(id);
+    void deleteCarById(@PathVariable int id) {
+        carService.deleteCarById(id);
     }
 }

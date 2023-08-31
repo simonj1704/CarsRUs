@@ -18,16 +18,18 @@ class MemberController {
 
     MemberService memberService;
 
-    public MemberController(MemberService memberService){
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
 
     //Security: Admin Only
     @GetMapping
-    List<MemberResponse> getMembers(){ return memberService.getMembers(false);}
+    List<MemberResponse> getMembers() {
+        return memberService.getMembers(false);
+    }
 
-    //Security Admin Only
+    //Security ADMIN
     @GetMapping(path = "/{username}")
     MemberResponse getMemberById(@PathVariable String username) throws Exception {
         return memberService.findById(username);
@@ -35,23 +37,27 @@ class MemberController {
 
     //Security --> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    MemberResponse addMember(@RequestBody MemberRequest body){
+    MemberResponse addMember(@RequestBody MemberRequest body) {
         return memberService.addMember(body);
     }
 
-    //Security Admin
+    //Security ADMIN
     @PutMapping("/{username}")
-    ResponseEntity<Boolean> editMember(@RequestBody MemberRequest body, @PathVariable String username){
+    ResponseEntity<Boolean> editMember(@RequestBody MemberRequest body, @PathVariable String username) {
         return memberService.editMember(body, username);
     }
 
-    //Security ????
+    //Security ADMIN
     @PatchMapping("/ranking/{username}/{value}")
-    ResponseEntity<Boolean> setRankingForUser(@PathVariable String username, @PathVariable int value) {return null;}
+    void setRankingForUser(@PathVariable String username, @PathVariable int value) {
+        memberService.setRankingForUser(username, value);
+    }
 
-    // Security ????
+    // Security ADMIN
     @DeleteMapping("/{username}")
-    void deleteMemberByUsername(@PathVariable String username) {}
+    void deleteMemberByUsername(@PathVariable String username) {
+        memberService.deleteMemberByUsername(username);
+    }
 
 
 }
