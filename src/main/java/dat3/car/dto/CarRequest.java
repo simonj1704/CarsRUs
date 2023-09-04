@@ -1,13 +1,13 @@
 package dat3.car.dto;
 
 import dat3.car.entity.Car;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarRequest {
     int id;
@@ -22,6 +22,7 @@ public class CarRequest {
 
     // Car to CarRequest conversion
     public CarRequest(Car c){
+        this.id = c.getId();
         this.brand = c.getBrand();
         this.model = c.getModel();
         this.pricePrDay = c.getPricePrDay();

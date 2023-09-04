@@ -31,8 +31,8 @@ public class Member extends AdminDetails{
     int ranking;
 
 
-    public Member(String user, String password, String email, String firstName,
-                  String lastName, String street, String city, String zip) {
+    public Member(String user, String password, String firstName,
+                  String lastName, String email, String street, String city, String zip) {
         this.username = user;
         this.password= password;
         this.email = email;

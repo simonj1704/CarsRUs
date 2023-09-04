@@ -66,7 +66,7 @@ public class MemberService {
 
     public void deleteMemberByUsername(String username) {
         Member member = getMemberByUsername(username);
-        memberRepository.deleteById(username);
+        memberRepository.delete(member);
     }
 
     public void setRankingForUser(String username, int value) {
@@ -77,6 +77,6 @@ public class MemberService {
 
     private Member getMemberByUsername(String username){
         return memberRepository.findById(username).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Member with this username does not exist"));
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Member with this username does not exist"));
     }
 }

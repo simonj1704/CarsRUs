@@ -71,6 +71,7 @@ public class CarService {
 
     private Car getCarById(int id){
         return carRepository.findById(id).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST,"Car with ID does not exist"));
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Car with ID does not exist"));
     }
+
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,7 +50,7 @@ public class MemberServiceMockitoTest {
     }
 
     @Test
-    public void testGetMembers(){
+    public void testGetMembers() {
         // Define a mock behavior
         Member m1 = makeMember("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
         Member m2 = makeMember("user2", "pw2", "fn2", "ln2", "email2", "street2", "city2", "zip2");
@@ -59,7 +62,7 @@ public class MemberServiceMockitoTest {
     }
 
     @Test
-    public void testFindById(){
+    public void testFindById() {
         when(memberRepository.findById("user2")).thenReturn(Optional.of(makeMember2()));
         MemberResponse response = memberService.findById("user2");
         assertEquals("user2", response.getUsername());
@@ -68,7 +71,7 @@ public class MemberServiceMockitoTest {
 
     //tests for memberService class methods
     @Test
-    public void testAddMember_UserExists(){
+    public void testAddMember_UserExists() {
         when(memberRepository.existsById("user1")).thenReturn(true);
         assertThrows(ResponseStatusException.class, () -> {
             Member existingMember = makeMember("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
@@ -79,11 +82,85 @@ public class MemberServiceMockitoTest {
     }
 
     @Test
-    public void testAddMember_Success(){
+    public void testAddMember_Success() {
         Member newMember = makeMember("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
+        when(memberRepository.existsById("user1")).thenReturn(false);
+        when(memberRepository.save(any(Member.class))).thenReturn(newMember);
         MemberRequest mr = new MemberRequest(newMember);
-        when(memberRepository.save(newMember)).thenReturn(newMember);
         MemberResponse response = memberService.addMember(mr);
         assertEquals("user1", response.getUsername());
+    }
+
+    @Test
+    public void testEditMember_CannotChangeUsername() {
+        Member newMember = makeMember("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
+        Member changedMember = makeMember("user2", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
+        MemberRequest mr2 = new MemberRequest(changedMember);
+        when(memberRepository.findById("user1")).thenReturn(Optional.of(newMember));
+        assertThrows(ResponseStatusException.class, () -> {
+            memberService.editMember(mr2, "user1");
+        });
+    }
+
+    @Test
+    public void testEditMember_Success() {
+        Member newMember = makeMember("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
+        MemberRequest mr = new MemberRequest(newMember);
+        mr.setFirstName("newFirstName");
+        mr.setLastName("newLastName");
+
+        when(memberRepository.findById("user1")).thenReturn(Optional.of(newMember));
+
+        memberService.editMember(mr, "user1");
+
+        assertEquals("user1", newMember.getUsername());
+        assertEquals("newFirstName", newMember.getFirstName());
+        assertEquals("newLastName", newMember.getLastName());
+        assertEquals("pw1", newMember.getPassword());
+        assertEquals("email1", newMember.getEmail());
+        assertEquals("street1", newMember.getStreet());
+        assertEquals("city1", newMember.getCity());
+        assertEquals("zip1", newMember.getZip());
+    }
+
+    @Test
+    public void testDeleteMemberByUsername() {
+        String testUsername = "testUser";
+        Member testMember = new Member();
+        testMember.setUsername(testUsername);
+
+        // Mock the behavior of memberRepository to return the testMember when findById is called with testUsername.
+        when(memberRepository.findById(testUsername)).thenReturn(Optional.of(testMember));
+
+        // Call the method under test.
+        memberService.deleteMemberByUsername(testUsername);
+
+        // Verify that memberRepository's delete method was called with the testMember.
+        verify(memberRepository).delete(testMember);
+    }
+
+    @Test
+    public void testDeleteMemberByUsername_MemberNotFound(){
+        String testUsername = "testUser";
+
+        when(memberRepository.findById(testUsername)).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class,
+                () -> memberService.deleteMemberByUsername(testUsername));
+    }
+
+    @Test
+    public void testSetRankingForUser(){
+        Member m1 = new Member();
+        when(memberRepository.findById("user2")).thenReturn(Optional.of(m1));
+        int testRanking = 5;
+
+        // Mock the behavior of memberRepository to save the testMember.
+        when(memberRepository.save(m1)).thenReturn(m1);
+        memberService.setRankingForUser("user2", testRanking);
+        assertEquals(testRanking, m1.getRanking());
+
+        // Verify that memberRepository's save method was called with the testMember.
+        verify(memberRepository).save(m1);
     }
 }

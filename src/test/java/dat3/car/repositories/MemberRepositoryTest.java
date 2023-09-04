@@ -17,9 +17,9 @@ class MemberRepositoryTest {
     @BeforeEach
     public void setUp(){
         memberRepository.deleteAll();
-        memberRepository.save(new Member("user1", "pass1", "user1@example.com", "John", "Doe", "123 Main St", "City1", "12345"));
-        memberRepository.save(new Member("user2", "pass2", "user2@example.com", "Jane", "Smith", "456 Elm St", "City2", "67890"));
-        memberRepository.save(new Member("user3", "pass3", "user3@example.com", "Michael", "Johnson", "789 Oak St", "City3", "54321"));
+        memberRepository.save(new Member("user1", "pass1", "John", "Doe", "user1@example.com", "123 Main St", "City1", "12345"));
+        memberRepository.save(new Member("user2", "pass2", "Jane", "Smith", "user2@example.com", "456 Elm St", "City2", "67890"));
+        memberRepository.save(new Member("user3", "pass3", "Michael", "Johnson", "user3@example.com", "789 Oak St", "City3", "54321"));
         isInitialized = true;
     }
 
