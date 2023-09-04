@@ -6,13 +6,14 @@ import dat3.car.repositories.CarRepository;
 import dat3.car.repositories.MemberRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Controller
+@Configuration
 public class DeveloperData implements ApplicationRunner {
 
     CarRepository carRepository;
