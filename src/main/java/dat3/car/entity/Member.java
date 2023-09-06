@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,7 +38,7 @@ public class Member extends AdminDetails{
 
     public void addReservation(Reservation reservation){
         if (reservations == null){
-            reservations = List.of();
+            reservations = new ArrayList<>();
         }
         reservations.add(reservation);
     }

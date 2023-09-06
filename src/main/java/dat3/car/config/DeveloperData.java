@@ -23,9 +23,10 @@ public class DeveloperData implements ApplicationRunner {
     MemberRepository memberRepository;
     ReservationRepository reservationRepository;
 
-    public DeveloperData(CarRepository carRepository, MemberRepository memberRepository) {
+    public DeveloperData(CarRepository carRepository, MemberRepository memberRepository, ReservationRepository reservationRepository) {
         this.carRepository = carRepository;
         this.memberRepository = memberRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
