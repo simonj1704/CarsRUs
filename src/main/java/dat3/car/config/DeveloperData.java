@@ -5,6 +5,7 @@ import dat3.car.entity.Member;
 import dat3.car.entity.Reservation;
 import dat3.car.repositories.CarRepository;
 import dat3.car.repositories.MemberRepository;
+import dat3.car.repositories.ReservationRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,8 @@ public class DeveloperData implements ApplicationRunner {
 
     CarRepository carRepository;
     MemberRepository memberRepository;
+
+    ReservationRepository reservationRepository;
 
     public DeveloperData(CarRepository carRepository, MemberRepository memberRepository) {
         this.carRepository = carRepository;
@@ -45,6 +48,8 @@ public class DeveloperData implements ApplicationRunner {
 
         Reservation reservation1 = new Reservation(date1start, date1end, 760, car1, m1);
         Reservation reservation2 = new Reservation(date2start, date2end, 760, car1, m1);
+        reservationRepository.save(reservation1);
+        reservationRepository.save(reservation2);
 
         System.out.println("xxxx ------> "+car1.getReservations().size());
         System.out.println("xxxx ------> "+m1.getReservations().size());
