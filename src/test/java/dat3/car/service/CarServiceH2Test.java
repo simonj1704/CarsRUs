@@ -50,14 +50,14 @@ public class CarServiceH2Test {
 
     @Test
     void testFindByIdFound() {
-        CarResponse response = carService.findById(c1.getId());
+        CarResponse response = carService.findById(c1.getId(), true);
         assertEquals(c1.getId(), response.getId());
     }
 
     @Test
     void testFindByIdNotFound(){
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
-                () -> carService.findById(999));
+                () -> carService.findById(999, true));
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     }
 
@@ -86,7 +86,7 @@ public class CarServiceH2Test {
         carService.editCar(request, c1.getId());
 
         carRepository.flush();
-        CarResponse response = carService.findById(c1.getId());
+        CarResponse response = carService.findById(c1.getId(), true);
         assertEquals("BMW", response.getBrand());
         assertEquals("newModel", response.getModel());
         assertEquals(200.0, response.getPricePrDay());
@@ -117,7 +117,7 @@ public class CarServiceH2Test {
     @Test
     void testSetBestDiscountOnCar(){
         carService.setBestDiscountOnCar(c1.getId(), 50);
-        CarResponse response = carService.findById(c1.getId());
+        CarResponse response = carService.findById(c1.getId(), true);
         assertEquals(50, response.getBestDiscount());
     }
 

@@ -2,6 +2,7 @@ package dat3.car.config;
 
 import dat3.car.entity.Car;
 import dat3.car.entity.Member;
+import dat3.car.entity.Reservation;
 import dat3.car.repositories.CarRepository;
 import dat3.car.repositories.MemberRepository;
 import org.springframework.boot.ApplicationArguments;
@@ -9,6 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,8 +28,27 @@ public class DeveloperData implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        carRepository.saveAll(generateCars());
-        memberRepository.saveAll(generateMembers());
+        List<Car> cars = generateCars();
+        List<Member> members = generateMembers();
+        carRepository.saveAll(cars);
+        memberRepository.saveAll(members);
+
+        Car car1 = new Car("VW", "Golf", 760, 25);
+        Member m1 = new Member("Jan","test12","Morten","Jan","Jensen","Lyngbyvej 1","Lyngby","2800");
+        carRepository.save(car1);
+        memberRepository.save(m1);
+
+        LocalDate date1start = LocalDate.now().plusDays(2);
+        LocalDate date1end = LocalDate.now().plusDays(4);
+        LocalDate date2start = LocalDate.now().plusDays(5);
+        LocalDate date2end = LocalDate.now().plusDays(7);
+
+        Reservation reservation1 = new Reservation(date1start, date1end, 760, car1, m1);
+        Reservation reservation2 = new Reservation(date2start, date2end, 760, car1, m1);
+
+        System.out.println("xxxx ------> "+car1.getReservations().size());
+        System.out.println("xxxx ------> "+m1.getReservations().size());
+
     }
 
     private List<Car> generateCars() {

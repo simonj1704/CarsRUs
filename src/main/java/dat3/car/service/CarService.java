@@ -31,9 +31,9 @@ public class CarService {
         return response;
     }
 
-    public CarResponse findById(int id) {
+    public CarResponse findById(int id, boolean includeAll) {
         Car car = getCarById(id);
-        return new CarResponse(car, true);
+        return new CarResponse(car, includeAll);
     }
 
     public CarResponse addCar(CarRequest body) {
@@ -64,6 +64,12 @@ public class CarService {
         carRepository.save(car);
     }
 
+    public void setPrice(int id, double newPrice) {
+        Car car = getCarById(id);
+        car.setPricePrDay(newPrice);
+        carRepository.save(car);
+    }
+
     public void deleteCarById(int id) {
         Car car = getCarById(id);
         carRepository.delete(car);
@@ -73,5 +79,6 @@ public class CarService {
         return carRepository.findById(id).
                 orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Car with ID does not exist"));
     }
+
 
 }

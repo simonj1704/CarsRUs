@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +28,15 @@ public class Car extends AdminDetails{
     @Column(name="max_discount")
     int bestDiscount;
 
+    @OneToMany(mappedBy = "car")
+    List<Reservation> reservations;
+
+    public void addReservation(Reservation reservation){
+        if (reservations == null){
+            reservations = List.of();
+        }
+        reservations.add(reservation);
+    }
 
     public Car(int id, String brand, String model, double pricePrDay, int bestDiscount) {
         this.id = id;

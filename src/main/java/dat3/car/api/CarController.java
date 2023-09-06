@@ -19,14 +19,14 @@ public class CarController {
     }
 
 
-    //Security: Admin Only
+    //Security: Anonymous
     @GetMapping
     List<CarResponse> getCars(){ return carService.getCars(false);}
 
-    //Security Admin Only
+    //Security Anonymous
     @GetMapping(path = "/{id}")
     CarResponse getCarById(@PathVariable int id) throws Exception {
-        return carService.findById(id);
+        return carService.findById(id, true);
     }
 
     //Security --> Anonymous
@@ -39,6 +39,12 @@ public class CarController {
     @PutMapping("/{id}")
     ResponseEntity<Boolean> editCar(@RequestBody CarRequest body, @PathVariable int id){
         return carService.editCar(body, id);
+    }
+
+    //Security Admin
+    @PatchMapping("/price/{id}/{newPrice}")
+    void setPrice(@PathVariable int id, @PathVariable double newPrice) {
+        carService.setPrice(id, newPrice);
     }
 
     //Security ADMIN

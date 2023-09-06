@@ -78,7 +78,7 @@ public class CarServiceMockitoTest {
     @Test
     public void testFindById() {
         when(carRepository.findById(1)).thenReturn(java.util.Optional.of(makeCar2()));
-        CarResponse response = carService.findById(1);
+        CarResponse response = carService.findById(1, true);
         assertEquals(1, response.getId());
         assertNotNull(response.getCreated(), "Dates must be set since true was passed to getCars");
     }
@@ -88,7 +88,7 @@ public class CarServiceMockitoTest {
         when(carRepository.findById(999)).thenReturn(java.util.Optional.empty());
         ResponseStatusException ex = assertThrows(ResponseStatusException.class,
                 () -> {
-                    carService.findById(999);
+                    carService.findById(999, true);
                 });
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     }
