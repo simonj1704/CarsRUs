@@ -21,7 +21,6 @@ public class DeveloperData implements ApplicationRunner {
 
     CarRepository carRepository;
     MemberRepository memberRepository;
-
     ReservationRepository reservationRepository;
 
     public DeveloperData(CarRepository carRepository, MemberRepository memberRepository) {
