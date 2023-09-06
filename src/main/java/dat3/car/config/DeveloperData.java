@@ -40,13 +40,11 @@ public class DeveloperData implements ApplicationRunner {
         carRepository.save(car1);
         memberRepository.save(m1);
 
-        LocalDate date1start = LocalDate.now().plusDays(2);
-        LocalDate date1end = LocalDate.now().plusDays(4);
-        LocalDate date2start = LocalDate.now().plusDays(5);
-        LocalDate date2end = LocalDate.now().plusDays(7);
+        LocalDate date1 = LocalDate.now().plusDays(2);
+        LocalDate date2 = LocalDate.now().plusDays(5);
 
-        Reservation reservation1 = new Reservation(date1start, date1end, 760, car1, m1);
-        Reservation reservation2 = new Reservation(date2start, date2end, 760, car1, m1);
+        Reservation reservation1 = new Reservation(date1, car1, m1);
+        Reservation reservation2 = new Reservation(date2,  car1, m1);
         reservationRepository.save(reservation1);
         reservationRepository.save(reservation2);
 
