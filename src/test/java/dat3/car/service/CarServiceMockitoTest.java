@@ -100,6 +100,7 @@ public class CarServiceMockitoTest {
         CarRequest cr = new CarRequest(newCar);
         CarResponse response = carService.addCar(cr);
         assertEquals(1, response.getId());
+        assertEquals("BMW", response.getBrand());
     }
 
     @Test

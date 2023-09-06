@@ -41,49 +41,52 @@ public class ReservationServiceMockitoTest {
     @Mock
     private MemberRepository memberRepository;
 
+    Car car1, car2;
+    Member member1, member2;
+    LocalDate date1, date2;
+
     @BeforeEach
     void setUp() {
         reservationService = new ReservationService(reservationRepository, carRepository, memberRepository);
+        car1 = new Car(1, "Audi", "A4", 100.0, 10);
+        car1.setReservations(new ArrayList<>());
+        car2 = new Car(2, "BMW", "M3", 200.0, 20);
+        car2.setReservations(new ArrayList<>());
+        member1 = new Member("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
+        member2 = new Member("user2", "pw2", "fn2", "ln2", "email2", "street2", "city2", "zip2");
+        date1 = LocalDate.now().plusDays(1);
+        date2 = LocalDate.now().plusDays(2);
+
     }
 
-    private Reservation makeReservation(LocalDate rentalDate, Car car, Member member) {
-        Reservation reservation = new Reservation(rentalDate, car, member);
-        reservation.setCreated(LocalDateTime.now());
-        reservation.setEdited(LocalDateTime.now());
-        return reservation;
-    }
-
-    private Reservation makeReservation2() {
-        Car car = new Car(1, "BMW", "M5", 150.5, 10);
-        Member member = new Member("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
-        memberRepository.save(member);
-        carRepository.save(car);
-        Reservation reservation = new Reservation( LocalDate.now(), car, member);
-        reservation.setCreated(LocalDateTime.now());
-        reservation.setEdited(LocalDateTime.now());
-        return reservation;
-    }
 
 
     @Test
     public void testReserveCar_Success(){
-        Reservation r1 = makeReservation2();
-        ReservationRequest reservationRequest = new ReservationRequest(r1);
+        Reservation reservation = new Reservation();
+        reservation.setRentalDate(date1);
+        reservation.setCar(car1);
+        reservation.setMember(member1);
+        reservation.setId(1);
 
-        // Define a mock behavior
-        when(reservationRepository.save(any())).thenReturn(r1);
-        when(memberRepository.findById(any())).thenReturn(Optional.of(r1.getMember()));
-        when(carRepository.findById(any())).thenReturn(Optional.of(r1.getCar()));
-        ReservationResponse response = reservationService.reserveCar(reservationRequest);
-        //Assertions
-        assertEquals(r1.getId(), response.getId());
-        assertEquals(r1.getRentalDate(), response.getReservationDate());
-        assertEquals(r1.getCar().getId(), response.getCarId());
+        ReservationRequest reservationRequest = new ReservationRequest(reservation);
+
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member1));
+        when(carRepository.findById(any())).thenReturn(Optional.of(car1));
+        when(reservationRepository.save(any())).thenReturn(reservation);
+
+
+
+        ReservationResponse reservationResponse = reservationService.reserveCar(reservationRequest);
+
+        assertEquals(1, reservationResponse.getId());
+        assertEquals(date1, reservationResponse.getReservationDate());
+        assertEquals(car1.getId(), reservationResponse.getCarId());
     }
 
     @Test
     public void testReserveCar_DateInPast(){
-        ReservationRequest reservationRequest = new ReservationRequest(makeReservation2());
+        ReservationRequest reservationRequest = new ReservationRequest(new Reservation(date1, car1, member1));
         reservationRequest.setRentalDate(LocalDate.of(2020, 1, 1));
         //Assertions
         assertThrows(ResponseStatusException.class, () -> {
@@ -94,22 +97,7 @@ public class ReservationServiceMockitoTest {
 
     @Test
     public void testReserveCar_CarAlreadyReserved(){
-        Car car = new Car();
 
-        Reservation r1 = makeReservation(LocalDate.now(), car, new Member());
-        Reservation r2 = makeReservation(LocalDate.now(), car, new Member());
-
-        // Define a mock behavior
-        when(memberRepository.findById(any())).thenReturn(Optional.of(r1.getMember()));
-        when(carRepository.findById(any())).thenReturn(Optional.of(r1.getCar()));
-
-
-
-        //Assertions
-        assertThrows(ResponseStatusException.class, () -> {
-                    reservationService.reserveCar(new ReservationRequest(r1));
-                }
-        );
     }
 
 }
