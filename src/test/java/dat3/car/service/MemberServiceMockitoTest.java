@@ -116,7 +116,6 @@ public class MemberServiceMockitoTest {
         assertEquals("user1", newMember.getUsername());
         assertEquals("newFirstName", newMember.getFirstName());
         assertEquals("newLastName", newMember.getLastName());
-        assertEquals("pw1", newMember.getPassword());
         assertEquals("email1", newMember.getEmail());
         assertEquals("street1", newMember.getStreet());
         assertEquals("city1", newMember.getCity());

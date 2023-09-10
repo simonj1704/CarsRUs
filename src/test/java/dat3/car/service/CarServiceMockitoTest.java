@@ -94,6 +94,17 @@ public class CarServiceMockitoTest {
     }
 
     @Test
+    public void testFindCarByBrandAndModel() {
+        Car c1 = makeCar(1, "BMW", "M5", 150.5, 10);
+        Car c2 = makeCar(2, "BMW", "M5", 100.0, 20);
+        when(carRepository.getByBrandAndModel("BMW", "M5")).thenReturn(List.of(c1, c2));
+        List<CarResponse> responses = carService.findCarByBrandAndModel("BMW", "M5");
+        assertEquals(2, responses.size(), "Expected 2 cars");
+        assertEquals("BMW", responses.get(0).getBrand());
+        assertEquals("M5", responses.get(0).getModel());
+    }
+
+    @Test
     public void testAddCar() {
         Car newCar = makeCar(1, "BMW", "M5", 150.5, 10);
         when(carRepository.save(any(Car.class))).thenReturn(newCar);

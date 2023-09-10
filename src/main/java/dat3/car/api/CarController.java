@@ -29,6 +29,18 @@ public class CarController {
         return carService.findById(id, true);
     }
 
+    //Security Anonymous
+    @GetMapping(path = "/brand/{brand}/model/{model}")
+    List<CarResponse> getCarByBrandAndModel(@PathVariable String brand, @PathVariable String model){
+        return carService.findCarByBrandAndModel(brand, model);
+    }
+
+    //Security Anonymous
+    @GetMapping(path = "/available")
+    List<CarResponse> getAvailableCars(){
+        return carService.findAvailableCars();
+    }
+
     //Security --> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     CarResponse addCar(@RequestBody CarRequest body){

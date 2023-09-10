@@ -36,6 +36,23 @@ public class CarService {
         return new CarResponse(car, includeAll);
     }
 
+    public List<CarResponse> findCarByBrandAndModel(String brand, String model){
+        List<Car> cars = carRepository.getByBrandAndModel(brand, model);
+        List<CarResponse> response = new ArrayList<>();
+        for (Car car : cars){
+            CarResponse cr = new CarResponse(car, false);
+            response.add(cr);
+        }
+
+        return response;
+    }
+
+    public List<CarResponse> findAvailableCars(){
+        List<Car> cars = carRepository.getByReservationsEmpty();
+        List<CarResponse> response = cars.stream().map(car -> new CarResponse(car, false)).toList();
+        return response;
+    }
+
     public CarResponse addCar(CarRequest body) {
         if(carRepository.existsById(body.getId())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This car already exists");

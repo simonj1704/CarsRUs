@@ -1,9 +1,7 @@
 package dat3.car.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import dat3.security.entity.UserWithRoles;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 //------------------
 @Entity
-@Table(name="member")
-public class Member extends AdminDetails{
-    @Id
-    String username;
-    String email;
-    String password;
+@Table(name = "member")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "USER_TYPE")
+public class Member extends UserWithRoles {
     String firstName;
     String lastName;
     String street;
@@ -36,8 +32,8 @@ public class Member extends AdminDetails{
     @OneToMany(mappedBy = "member")
     List<Reservation> reservations;
 
-    public void addReservation(Reservation reservation){
-        if (reservations == null){
+    public void addReservation(Reservation reservation) {
+        if (reservations == null) {
             reservations = new ArrayList<>();
         }
         reservations.add(reservation);
@@ -46,9 +42,7 @@ public class Member extends AdminDetails{
 
     public Member(String user, String password, String firstName,
                   String lastName, String email, String street, String city, String zip) {
-        this.username = user;
-        this.password= password;
-        this.email = email;
+        super(user, password, email);
         this.firstName = firstName;
         this.lastName = lastName;
         this.street = street;
