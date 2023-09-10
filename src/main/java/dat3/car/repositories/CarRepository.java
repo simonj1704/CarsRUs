@@ -13,4 +13,5 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     List<Car> getCarsByBestDiscountNotNullOrderByBestDiscountDesc();
 
+    //TODO add method to get average price pr day
 }

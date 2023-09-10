@@ -47,6 +47,12 @@ public class CarController {
         return carService.getCarsByBestDiscount(true);
     }
 
+    //Security ADMIN
+    @GetMapping(path = "/averagePrice")
+    double getAveragePricePrDay(){
+        return carService.getAveragePricePrDay();
+    }
+
     //Security --> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     CarResponse addCar(@RequestBody CarRequest body){

@@ -16,14 +16,14 @@ import java.util.List;
 public class CarService {
     CarRepository carRepository;
 
-    public CarService(CarRepository carRepository){
+    public CarService(CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
     public List<CarResponse> getCars(boolean includeAll) {
         List<Car> cars = carRepository.findAll();
         List<CarResponse> response = new ArrayList<>();
-        for (Car car : cars){
+        for (Car car : cars) {
             CarResponse cr = new CarResponse(car, includeAll);
             response.add(cr);
         }
@@ -31,10 +31,19 @@ public class CarService {
         return response;
     }
 
-    public List<CarResponse> getCarsByBestDiscount(boolean includeAll){
-        List<Car>  cars = carRepository.getCarsByBestDiscountNotNullOrderByBestDiscountDesc();
+    public List<CarResponse> getCarsByBestDiscount(boolean includeAll) {
+        List<Car> cars = carRepository.getCarsByBestDiscountNotNullOrderByBestDiscountDesc();
         List<CarResponse> response = cars.stream().map(car -> new CarResponse(car, includeAll)).toList();
         return response;
+    }
+
+    public double getAveragePricePrDay() {
+        List<Car> cars = carRepository.findAll();
+        double sum = 0;
+        for (Car car : cars) {
+            sum += car.getPricePrDay();
+        }
+        return sum / cars.size();
     }
 
     public CarResponse findById(int id, boolean includeAll) {
@@ -42,10 +51,10 @@ public class CarService {
         return new CarResponse(car, includeAll);
     }
 
-    public List<CarResponse> findCarByBrandAndModel(String brand, String model){
+    public List<CarResponse> findCarByBrandAndModel(String brand, String model) {
         List<Car> cars = carRepository.getByBrandAndModel(brand, model);
         List<CarResponse> response = new ArrayList<>();
-        for (Car car : cars){
+        for (Car car : cars) {
             CarResponse cr = new CarResponse(car, false);
             response.add(cr);
         }
@@ -53,15 +62,15 @@ public class CarService {
         return response;
     }
 
-    public List<CarResponse> findAvailableCars(){
+    public List<CarResponse> findAvailableCars() {
         List<Car> cars = carRepository.getByReservationsEmpty();
         List<CarResponse> response = cars.stream().map(car -> new CarResponse(car, false)).toList();
         return response;
     }
 
     public CarResponse addCar(CarRequest body) {
-        if(carRepository.existsById(body.getId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This car already exists");
+        if (carRepository.existsById(body.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This car already exists");
         }
         Car newCar = carRepository.save(CarRequest.getCarRequest(body));
 
@@ -70,8 +79,8 @@ public class CarService {
 
     public ResponseEntity<Boolean> editCar(CarRequest body, int id) {
         Car car = getCarById(id);
-        if(body.getId() != id){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Cannot change ID");
+        if (body.getId() != id) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot change ID");
         }
         car.setModel(body.getModel());
         car.setBrand(body.getBrand());
@@ -81,7 +90,7 @@ public class CarService {
         return ResponseEntity.ok(true);
     }
 
-    public void setBestDiscountOnCar(int id, int value){
+    public void setBestDiscountOnCar(int id, int value) {
         Car car = getCarById(id);
         car.setBestDiscount(value);
         carRepository.save(car);
@@ -98,9 +107,9 @@ public class CarService {
         carRepository.delete(car);
     }
 
-    private Car getCarById(int id){
+    private Car getCarById(int id) {
         return carRepository.findById(id).
-                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Car with ID does not exist"));
+                orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID does not exist"));
     }
 
 

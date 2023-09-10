@@ -31,7 +31,7 @@ class CarRepositoryTest {
     public void setUp() {
         if (!isInitialized) {
             carRepository.deleteAll();
-            Car car1 = carRepository.save(new Car("BMW", "M5", 150.5, 10));
+            Car car1 = carRepository.save(new Car("BMW", "M5", 150.0, 10));
             car1Id = car1.getId();
             Car car2 = carRepository.save(new Car("Mercedes", "E250", 100.0, 20));
             car2Id = car2.getId();
@@ -102,5 +102,6 @@ class CarRepositoryTest {
         assertEquals("BMW", cars.get(2).getBrand());
         assertEquals("Toyota", cars.get(3).getBrand());
     }
+
 
 }
