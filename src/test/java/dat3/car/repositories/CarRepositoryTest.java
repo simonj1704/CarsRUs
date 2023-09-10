@@ -3,14 +3,12 @@ package dat3.car.repositories;
 import dat3.car.entity.Car;
 import dat3.car.entity.Member;
 import dat3.car.entity.Reservation;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -89,4 +87,20 @@ class CarRepositoryTest {
         assertEquals(2, carRepository.getByReservationsEmpty().size());
 
     }
+
+    @Test
+    public void testGetCarsByBestDiscount(){
+        Car car3 = carRepository.save(new Car("Audi", "A4", 200.0, 30));
+        Car car4 = carRepository.save(new Car("Toyota", "Prius", 100.0, 5));
+
+        List<Car> cars = carRepository.getCarsByBestDiscountNotNullOrderByBestDiscountDesc();
+
+        assertEquals(4, cars.size());
+        assertEquals(30, cars.get(0).getBestDiscount());
+        assertEquals("Audi", cars.get(0).getBrand());
+        assertEquals("Mercedes", cars.get(1).getBrand());
+        assertEquals("BMW", cars.get(2).getBrand());
+        assertEquals("Toyota", cars.get(3).getBrand());
+    }
+
 }

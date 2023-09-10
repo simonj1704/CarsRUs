@@ -7,6 +7,7 @@ import dat3.car.entity.Reservation;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,8 @@ public class MemberResponse {
             this.reservations = m.getReservations().stream()
                     .map(ReservationResponse::new)
                     .collect(Collectors.toList());
+        } else {
+            this.reservations = new ArrayList<>();
         }
     }
 }

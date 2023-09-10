@@ -41,6 +41,12 @@ public class CarController {
         return carService.findAvailableCars();
     }
 
+    //Security ADMIN
+    @GetMapping(path = "/bestDiscount")
+    List<CarResponse> getCarsByBestDiscount(){
+        return carService.getCarsByBestDiscount(true);
+    }
+
     //Security --> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     CarResponse addCar(@RequestBody CarRequest body){

@@ -74,6 +74,17 @@ public class CarServiceMockitoTest {
         assertNull(responses.get(0).getCreated(), "Dates must be null since true was passed to getCars");
     }
 
+    @Test
+    public void testGetCarsByBestDiscount(){
+        Car c1 = makeCar(1, "BMW", "M5", 150.5, 10);
+        Car c2 = makeCar(2, "Mercedes", "E250", 100.0, 20);
+        when(carRepository.getCarsByBestDiscountNotNullOrderByBestDiscountDesc()).thenReturn(List.of(c2, c1));
+        List<CarResponse> responses = carService.getCarsByBestDiscount(true);
+        assertEquals(2, responses.size(), "Expected 2 cars");
+        assertEquals(20, responses.get(0).getBestDiscount());
+        assertEquals("Mercedes", responses.get(0).getBrand());
+    }
+
 
     @Test
     public void testFindById() {

@@ -31,6 +31,12 @@ public class CarService {
         return response;
     }
 
+    public List<CarResponse> getCarsByBestDiscount(boolean includeAll){
+        List<Car>  cars = carRepository.getCarsByBestDiscountNotNullOrderByBestDiscountDesc();
+        List<CarResponse> response = cars.stream().map(car -> new CarResponse(car, includeAll)).toList();
+        return response;
+    }
+
     public CarResponse findById(int id, boolean includeAll) {
         Car car = getCarById(id);
         return new CarResponse(car, includeAll);
