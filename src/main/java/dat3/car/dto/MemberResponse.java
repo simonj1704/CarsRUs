@@ -62,7 +62,7 @@ public class MemberResponse {
     }
 
     public MemberResponse(Member m, boolean includeAll, boolean includeReservations){
-        this(m, false);
+        this(m, includeAll);
         if(includeReservations){
             this.reservations = m.getReservations().stream()
                     .map(ReservationResponse::new)
