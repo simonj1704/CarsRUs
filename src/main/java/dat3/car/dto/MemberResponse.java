@@ -60,5 +60,14 @@ public class MemberResponse {
             this.reservations = new ArrayList<>();
         }
     }
+
+    public MemberResponse(Member m, boolean includeAll, boolean includeReservations){
+        this(m, false);
+        if(includeReservations){
+            this.reservations = m.getReservations().stream()
+                    .map(ReservationResponse::new)
+                    .collect(Collectors.toList());
+        }
+    }
 }
 
