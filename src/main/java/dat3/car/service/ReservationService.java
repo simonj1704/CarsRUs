@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ReservationService {
@@ -45,5 +46,23 @@ public class ReservationService {
         Reservation res = reservationRepository.save(new Reservation(body.getRentalDate(), car, member));
         return new ReservationResponse(res);
 
+    }
+
+    public List<ReservationResponse> getReservations(){
+        List<Reservation> reservations = reservationRepository.findAll();
+        return reservations.stream().map(ReservationResponse::new).toList();
+    }
+
+    public ReservationResponse findById(int id){
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No reservation with this id found"));
+        return new ReservationResponse(reservation);
+    }
+
+    public List<ReservationResponse> getReservationsByMemberId(String username){
+        Member member = memberRepository.findById(username).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No member with this id found"));
+        List<Reservation> reservations = reservationRepository.getReservationsByMember_Username(member.getUsername());
+        return reservations.stream().map(ReservationResponse::new).toList();
     }
 }

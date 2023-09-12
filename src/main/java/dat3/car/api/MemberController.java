@@ -35,6 +35,12 @@ class MemberController {
         return memberService.findById(username);
     }
 
+    //Security ADMIN
+    @GetMapping(path = "/reservations")
+    List<MemberResponse> getMembersWithReservations() {
+        return memberService.getMembersWithReservations();
+    }
+
     //Security --> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     MemberResponse addMember(@RequestBody MemberRequest body) {

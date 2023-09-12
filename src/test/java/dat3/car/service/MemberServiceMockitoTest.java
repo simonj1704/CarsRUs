@@ -62,6 +62,19 @@ public class MemberServiceMockitoTest {
     }
 
     @Test
+    public void testGetMembersWithReservations() {
+        Member m1 = makeMember("user1", "pw1", "fn1", "ln1", "email1", "street1", "city1", "zip1");
+        Member m2 = makeMember("user2", "pw2", "fn2", "ln2", "email2", "street2", "city2", "zip2");
+        m1.setReservations(List.of());
+        m2.setReservations(List.of());
+        when(memberRepository.getMembersByReservationsNotNull()).thenReturn(List.of(m1, m2));
+        List<MemberResponse> responses = memberService.getMembersWithReservations();
+        assertEquals(2, responses.size(), "Expected 2 members");
+        assertNull(responses.get(0).getCreated(), "Dates must not be set since false was passed to getMembers");
+        assertNotNull(responses.get(0).getReservations(), "Reservations must be set since true was passed to getMembers");
+    }
+
+    @Test
     public void testFindById() {
         when(memberRepository.findById("user2")).thenReturn(Optional.of(makeMember2()));
         MemberResponse response = memberService.findById("user2");
@@ -139,7 +152,7 @@ public class MemberServiceMockitoTest {
     }
 
     @Test
-    public void testDeleteMemberByUsername_MemberNotFound(){
+    public void testDeleteMemberByUsername_MemberNotFound() {
         String testUsername = "testUser";
 
         when(memberRepository.findById(testUsername)).thenReturn(Optional.empty());
@@ -149,7 +162,7 @@ public class MemberServiceMockitoTest {
     }
 
     @Test
-    public void testSetRankingForUser(){
+    public void testSetRankingForUser() {
         Member m1 = new Member();
         when(memberRepository.findById("user2")).thenReturn(Optional.of(m1));
         int testRanking = 5;

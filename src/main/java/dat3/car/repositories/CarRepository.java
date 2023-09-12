@@ -14,7 +14,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     List<Car> getCarsByBestDiscountNotNullOrderByBestDiscountDesc();
 
-    //TODO setup test and service to use this method
     @Query("SELECT AVG(c.pricePrDay) FROM Car c")
     double getAveragePricePrDay();
 }

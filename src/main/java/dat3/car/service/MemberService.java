@@ -38,6 +38,11 @@ public class MemberService {
         return response;
     }
 
+    public List<MemberResponse> getMembersWithReservations(){
+        List<Member> members = memberRepository.getMembersByReservationsNotNull();
+        return members.stream().map(member -> new MemberResponse(member, false, true)).toList();
+    }
+
     public MemberResponse addMember(MemberRequest body) {
         if(memberRepository.existsById(body.getUsername())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"This user already exists");

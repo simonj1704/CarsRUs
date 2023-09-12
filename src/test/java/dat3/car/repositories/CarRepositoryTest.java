@@ -104,4 +104,8 @@ class CarRepositoryTest {
     }
 
 
+    @Test
+    public void testGetAveragePricePrDay(){
+        assertEquals(125.0, carRepository.getAveragePricePrDay());
+    }
 }

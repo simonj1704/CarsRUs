@@ -199,4 +199,13 @@ public class CarServiceMockitoTest {
         assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
     }
 
+
+    @Test
+    public void testGetAveragePricePrDay(){
+        Car c1 = makeCar(1, "BMW", "M5", 150.5, 10);
+        Car c2 = makeCar(2, "Mercedes", "E250", 100.0, 20);
+        when(carRepository.getAveragePricePrDay()).thenReturn(125.25);
+        double averagePricePrDay = carService.getAveragePricePrDay();
+        assertEquals(125.25, averagePricePrDay);
+    }
 }

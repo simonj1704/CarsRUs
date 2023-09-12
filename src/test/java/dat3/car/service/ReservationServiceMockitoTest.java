@@ -97,7 +97,71 @@ public class ReservationServiceMockitoTest {
 
     @Test
     public void testReserveCar_CarAlreadyReserved(){
+        Reservation reservation = new Reservation();
+        reservation.setRentalDate(date1);
+        reservation.setCar(car1);
+        reservation.setMember(member1);
+        reservation.setId(1);
 
+        ReservationRequest reservationRequest = new ReservationRequest(reservation);
+
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member1));
+        when(carRepository.findById(any())).thenReturn(Optional.of(car1));
+        when(reservationRepository.save(any())).thenReturn(reservation);
+
+        ReservationResponse reservationResponse = reservationService.reserveCar(reservationRequest);
+
+        assertEquals(1, reservationResponse.getId());
+        assertEquals(date1, reservationResponse.getReservationDate());
+        assertEquals(car1.getId(), reservationResponse.getCarId());
+
+        Reservation reservation2 = new Reservation();
+        reservation2.setRentalDate(date1);
+        reservation2.setCar(car1);
+        reservation2.setMember(member1);
+        reservation2.setId(2);
+
+        ReservationRequest reservationRequest2 = new ReservationRequest(reservation2);
+
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member1));
+        when(carRepository.findById(any())).thenReturn(Optional.of(car1));
+
+        //Assertions
+        assertThrows(ResponseStatusException.class, () -> {
+                    reservationService.reserveCar(reservationRequest2);
+                }
+        );
+    }
+
+    @Test
+    public void testGetReservations(){
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(new Reservation(date1, car1, member1));
+        reservations.add(new Reservation(date2, car2, member2));
+
+        when(reservationRepository.findAll()).thenReturn(reservations);
+
+        List<ReservationResponse> reservationResponses = reservationService.getReservations();
+
+        assertEquals(2, reservationResponses.size());
+        assertEquals(date1, reservationResponses.get(0).getReservationDate());
+        assertEquals(date2, reservationResponses.get(1).getReservationDate());
+    }
+
+    @Test
+    public void testGetReservationByMemberId(){
+        List<Reservation> reservations = new ArrayList<>();
+        reservations.add(new Reservation(date1, car1, member1));
+        reservations.add(new Reservation(date2, car2, member1));
+
+        when(memberRepository.findById(any())).thenReturn(Optional.of(member1));
+        when(reservationRepository.getReservationsByMember_Username(any())).thenReturn(reservations);
+
+        List<ReservationResponse> reservationResponses = reservationService.getReservationsByMemberId("user1");
+
+        assertEquals(2, reservationResponses.size());
+        assertEquals(date1, reservationResponses.get(0).getReservationDate());
+        assertEquals(date2, reservationResponses.get(1).getReservationDate());
     }
 
 }

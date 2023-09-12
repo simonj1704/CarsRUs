@@ -38,12 +38,7 @@ public class CarService {
     }
 
     public double getAveragePricePrDay() {
-        List<Car> cars = carRepository.findAll();
-        double sum = 0;
-        for (Car car : cars) {
-            sum += car.getPricePrDay();
-        }
-        return sum / cars.size();
+        return carRepository.getAveragePricePrDay();
     }
 
     public CarResponse findById(int id, boolean includeAll) {
