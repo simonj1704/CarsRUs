@@ -8,6 +8,7 @@ import dat3.car.entity.Reservation;
 import dat3.car.repositories.CarRepository;
 import dat3.car.repositories.MemberRepository;
 import dat3.car.repositories.ReservationRepository;
+import dat3.security.repository.UserWithRolesRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,13 +42,16 @@ public class ReservationServiceMockitoTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private UserWithRolesRepository userWithRolesRepository;
+
     Car car1, car2;
     Member member1, member2;
     LocalDate date1, date2;
 
     @BeforeEach
     void setUp() {
-        reservationService = new ReservationService(reservationRepository, carRepository, memberRepository);
+        reservationService = new ReservationService(reservationRepository, carRepository, memberRepository, userWithRolesRepository);
         car1 = new Car(1, "Audi", "A4", 100.0, 10);
         car1.setReservations(new ArrayList<>());
         car2 = new Car(2, "BMW", "M3", 200.0, 20);
@@ -60,9 +64,8 @@ public class ReservationServiceMockitoTest {
     }
 
 
-
     @Test
-    public void testReserveCar_Success(){
+    public void testReserveCar_Success() {
         Reservation reservation = new Reservation();
         reservation.setRentalDate(date1);
         reservation.setCar(car1);
@@ -76,7 +79,6 @@ public class ReservationServiceMockitoTest {
         when(reservationRepository.save(any())).thenReturn(reservation);
 
 
-
         ReservationResponse reservationResponse = reservationService.reserveCar(reservationRequest);
 
         assertEquals(1, reservationResponse.getId());
@@ -85,18 +87,18 @@ public class ReservationServiceMockitoTest {
     }
 
     @Test
-    public void testReserveCar_DateInPast(){
+    public void testReserveCar_DateInPast() {
         ReservationRequest reservationRequest = new ReservationRequest(new Reservation(date1, car1, member1));
         reservationRequest.setRentalDate(LocalDate.of(2020, 1, 1));
         //Assertions
         assertThrows(ResponseStatusException.class, () -> {
-            reservationService.reserveCar(reservationRequest);
-        }
+                    reservationService.reserveCar(reservationRequest);
+                }
         );
     }
 
     @Test
-    public void testReserveCar_CarAlreadyReserved(){
+    public void testReserveCar_CarAlreadyReserved() {
         Reservation reservation = new Reservation();
         reservation.setRentalDate(date1);
         reservation.setCar(car1);
@@ -134,7 +136,7 @@ public class ReservationServiceMockitoTest {
     }
 
     @Test
-    public void testGetReservations(){
+    public void testGetReservations() {
         List<Reservation> reservations = new ArrayList<>();
         reservations.add(new Reservation(date1, car1, member1));
         reservations.add(new Reservation(date2, car2, member2));
@@ -149,7 +151,7 @@ public class ReservationServiceMockitoTest {
     }
 
     @Test
-    public void testGetReservationByMemberId(){
+    public void testGetReservationByMemberId() {
         List<Reservation> reservations = new ArrayList<>();
         reservations.add(new Reservation(date1, car1, member1));
         reservations.add(new Reservation(date2, car2, member1));

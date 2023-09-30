@@ -1,6 +1,7 @@
 package dat3.car.config;
 
 import dat3.car.entity.Member;
+import dat3.security.entity.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class MemberTestDataFactory {
             String zip = zips[i % 10];
 
             Member member = new Member(user, password, firstName, lastName, email, street, city, zip);
+            member.addRole(Role.USER);
             members.add(member);
         }
         return members;
